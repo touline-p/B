@@ -1,0 +1,979 @@
+Terminals unused in grammar
+
+    D_QUOTES
+    S_QUOTES
+    O_BRACKET
+    C_BRACKET
+    PERIOD
+    EOLN
+    EXTRN
+    FOR
+    WHILE
+    REPEAT
+    SWITCH
+    DO
+    BREAK
+    GOTO
+    NEXT
+    CASE
+    DEFAULT
+    TOO_LONG_ID
+
+
+Grammar
+
+    0 $accept: any_program $end
+
+    1 any_program: ε
+    2            | program
+
+    3 program: program_elem
+    4        | program program_elem
+
+    5 program_elem: var_declaration
+    6             | function_definition
+
+    7 function_definition_start: ID O_PAR func_params C_PAR O_CURLY_BRACKET
+
+    8 function_definition: function_definition_start statement_list C_CURLY_BRACKET
+
+    9 func_params: ε
+   10            | some_params
+
+   11 some_params: variable
+   12            | some_params COMMA variable
+
+   13 variable: LONG_ID
+   14         | ID
+
+   15 var_list: variable
+   16         | var_list COMMA variable
+
+   17 var_declaration: AUTO var_list
+
+   18 expression: function_call
+   19           | variable
+   20           | NB
+   21           | expression PLUS expression
+   22           | expression MINUS expression
+   23           | variable EQUAL expression
+   24           | expression ASTE expression
+   25           | expression PERCENT expression
+   26           | expression SLASH expression
+
+   27 expression_list: expression
+   28                | expression_list COMMA expression
+
+   29 function_call: ID O_PAR expression_list C_PAR
+   30              | ID O_PAR C_PAR
+
+   31 if_prelude: IF O_PAR expression C_PAR
+
+   32 if_condition: if_prelude statement
+
+   33 optional_else: ε
+   34              | ELSE statement
+
+   35 condition_branching: if_condition optional_else
+
+   36 statement: condition_branching
+   37          | O_CURLY_BRACKET statement_list C_CURLY_BRACKET
+   38          | var_declaration SEMICOLON
+   39          | expression SEMICOLON
+   40          | RETURN expression SEMICOLON
+
+   41 statement_list: ε
+   42               | statement_list statement
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256)
+    EQUAL (258) 23
+    PLUS (259) 21
+    MINUS (260) 22
+    ASTE (261) 24
+    SLASH (262) 26
+    PERCENT (263) 25
+    O_PAR (264) 7 29 30 31
+    C_PAR (265) 7 29 30 31
+    D_QUOTES (266)
+    S_QUOTES (267)
+    O_BRACKET (268)
+    C_BRACKET (269)
+    O_CURLY_BRACKET (270) 7 37
+    C_CURLY_BRACKET (271) 8 37
+    COMMA (272) 12 16 28
+    PERIOD (273)
+    SEMICOLON (274) 38 39 40
+    EOLN (275)
+    AUTO (276) 17
+    EXTRN (277)
+    IF (278) 31
+    FOR (279)
+    WHILE (280)
+    REPEAT (281)
+    SWITCH (282)
+    DO (283)
+    RETURN (284) 40
+    BREAK (285)
+    GOTO (286)
+    NEXT (287)
+    CASE (288)
+    DEFAULT (289)
+    LOWER_THAN_ELSE (290)
+    ELSE (291) 34
+    NB <ival> (292) 20
+    ID <sval> (293) 7 14 29 30
+    LONG_ID <sval> (294) 13
+    TOO_LONG_ID <sval> (295)
+
+
+Nonterminals, with rules where they appear
+
+    $accept (41)
+        on left: 0
+    any_program (42)
+        on left: 1 2
+        on right: 0
+    program (43)
+        on left: 3 4
+        on right: 2 4
+    program_elem (44)
+        on left: 5 6
+        on right: 3 4
+    function_definition_start (45)
+        on left: 7
+        on right: 8
+    function_definition (46)
+        on left: 8
+        on right: 6
+    func_params (47)
+        on left: 9 10
+        on right: 7
+    some_params (48)
+        on left: 11 12
+        on right: 10 12
+    variable <sval> (49)
+        on left: 13 14
+        on right: 11 12 15 16 19 23
+    var_list <ival> (50)
+        on left: 15 16
+        on right: 16 17
+    var_declaration <sval> (51)
+        on left: 17
+        on right: 5 38
+    expression <sval> (52)
+        on left: 18 19 20 21 22 23 24 25 26
+        on right: 21 22 23 24 25 26 27 28 31 39 40
+    expression_list (53)
+        on left: 27 28
+        on right: 28 29
+    function_call <sval> (54)
+        on left: 29 30
+        on right: 18
+    if_prelude (55)
+        on left: 31
+        on right: 32
+    if_condition (56)
+        on left: 32
+        on right: 35
+    optional_else (57)
+        on left: 33 34
+        on right: 35
+    condition_branching (58)
+        on left: 35
+        on right: 36
+    statement (59)
+        on left: 36 37 38 39 40
+        on right: 32 34 42
+    statement_list (60)
+        on left: 41 42
+        on right: 8 37 42
+
+
+State 0
+
+    0 $accept: • any_program $end
+
+    AUTO  shift, and go to state 1
+    ID    shift, and go to state 2
+
+    $default  reduce using rule 1 (any_program)
+
+    any_program                go to state 3
+    program                    go to state 4
+    program_elem               go to state 5
+    function_definition_start  go to state 6
+    function_definition        go to state 7
+    var_declaration            go to state 8
+
+
+State 1
+
+   17 var_declaration: AUTO • var_list
+
+    ID       shift, and go to state 9
+    LONG_ID  shift, and go to state 10
+
+    variable  go to state 11
+    var_list  go to state 12
+
+
+State 2
+
+    7 function_definition_start: ID • O_PAR func_params C_PAR O_CURLY_BRACKET
+
+    O_PAR  shift, and go to state 13
+
+
+State 3
+
+    0 $accept: any_program • $end
+
+    $end  shift, and go to state 14
+
+
+State 4
+
+    2 any_program: program •
+    4 program: program • program_elem
+
+    AUTO  shift, and go to state 1
+    ID    shift, and go to state 2
+
+    $default  reduce using rule 2 (any_program)
+
+    program_elem               go to state 15
+    function_definition_start  go to state 6
+    function_definition        go to state 7
+    var_declaration            go to state 8
+
+
+State 5
+
+    3 program: program_elem •
+
+    $default  reduce using rule 3 (program)
+
+
+State 6
+
+    8 function_definition: function_definition_start • statement_list C_CURLY_BRACKET
+
+    $default  reduce using rule 41 (statement_list)
+
+    statement_list  go to state 16
+
+
+State 7
+
+    6 program_elem: function_definition •
+
+    $default  reduce using rule 6 (program_elem)
+
+
+State 8
+
+    5 program_elem: var_declaration •
+
+    $default  reduce using rule 5 (program_elem)
+
+
+State 9
+
+   14 variable: ID •
+
+    $default  reduce using rule 14 (variable)
+
+
+State 10
+
+   13 variable: LONG_ID •
+
+    $default  reduce using rule 13 (variable)
+
+
+State 11
+
+   15 var_list: variable •
+
+    $default  reduce using rule 15 (var_list)
+
+
+State 12
+
+   16 var_list: var_list • COMMA variable
+   17 var_declaration: AUTO var_list •
+
+    COMMA  shift, and go to state 17
+
+    $default  reduce using rule 17 (var_declaration)
+
+
+State 13
+
+    7 function_definition_start: ID O_PAR • func_params C_PAR O_CURLY_BRACKET
+
+    ID       shift, and go to state 9
+    LONG_ID  shift, and go to state 10
+
+    $default  reduce using rule 9 (func_params)
+
+    func_params  go to state 18
+    some_params  go to state 19
+    variable     go to state 20
+
+
+State 14
+
+    0 $accept: any_program $end •
+
+    $default  accept
+
+
+State 15
+
+    4 program: program program_elem •
+
+    $default  reduce using rule 4 (program)
+
+
+State 16
+
+    8 function_definition: function_definition_start statement_list • C_CURLY_BRACKET
+   42 statement_list: statement_list • statement
+
+    O_CURLY_BRACKET  shift, and go to state 21
+    C_CURLY_BRACKET  shift, and go to state 22
+    AUTO             shift, and go to state 1
+    IF               shift, and go to state 23
+    RETURN           shift, and go to state 24
+    NB               shift, and go to state 25
+    ID               shift, and go to state 26
+    LONG_ID          shift, and go to state 10
+
+    variable             go to state 27
+    var_declaration      go to state 28
+    expression           go to state 29
+    function_call        go to state 30
+    if_prelude           go to state 31
+    if_condition         go to state 32
+    condition_branching  go to state 33
+    statement            go to state 34
+
+
+State 17
+
+   16 var_list: var_list COMMA • variable
+
+    ID       shift, and go to state 9
+    LONG_ID  shift, and go to state 10
+
+    variable  go to state 35
+
+
+State 18
+
+    7 function_definition_start: ID O_PAR func_params • C_PAR O_CURLY_BRACKET
+
+    C_PAR  shift, and go to state 36
+
+
+State 19
+
+   10 func_params: some_params •
+   12 some_params: some_params • COMMA variable
+
+    COMMA  shift, and go to state 37
+
+    $default  reduce using rule 10 (func_params)
+
+
+State 20
+
+   11 some_params: variable •
+
+    $default  reduce using rule 11 (some_params)
+
+
+State 21
+
+   37 statement: O_CURLY_BRACKET • statement_list C_CURLY_BRACKET
+
+    $default  reduce using rule 41 (statement_list)
+
+    statement_list  go to state 38
+
+
+State 22
+
+    8 function_definition: function_definition_start statement_list C_CURLY_BRACKET •
+
+    $default  reduce using rule 8 (function_definition)
+
+
+State 23
+
+   31 if_prelude: IF • O_PAR expression C_PAR
+
+    O_PAR  shift, and go to state 39
+
+
+State 24
+
+   40 statement: RETURN • expression SEMICOLON
+
+    NB       shift, and go to state 25
+    ID       shift, and go to state 26
+    LONG_ID  shift, and go to state 10
+
+    variable       go to state 27
+    expression     go to state 40
+    function_call  go to state 30
+
+
+State 25
+
+   20 expression: NB •
+
+    $default  reduce using rule 20 (expression)
+
+
+State 26
+
+   14 variable: ID •
+   29 function_call: ID • O_PAR expression_list C_PAR
+   30              | ID • O_PAR C_PAR
+
+    O_PAR  shift, and go to state 41
+
+    $default  reduce using rule 14 (variable)
+
+
+State 27
+
+   19 expression: variable •
+   23           | variable • EQUAL expression
+
+    EQUAL  shift, and go to state 42
+
+    $default  reduce using rule 19 (expression)
+
+
+State 28
+
+   38 statement: var_declaration • SEMICOLON
+
+    SEMICOLON  shift, and go to state 43
+
+
+State 29
+
+   21 expression: expression • PLUS expression
+   22           | expression • MINUS expression
+   24           | expression • ASTE expression
+   25           | expression • PERCENT expression
+   26           | expression • SLASH expression
+   39 statement: expression • SEMICOLON
+
+    PLUS       shift, and go to state 44
+    MINUS      shift, and go to state 45
+    ASTE       shift, and go to state 46
+    SLASH      shift, and go to state 47
+    PERCENT    shift, and go to state 48
+    SEMICOLON  shift, and go to state 49
+
+
+State 30
+
+   18 expression: function_call •
+
+    $default  reduce using rule 18 (expression)
+
+
+State 31
+
+   32 if_condition: if_prelude • statement
+
+    O_CURLY_BRACKET  shift, and go to state 21
+    AUTO             shift, and go to state 1
+    IF               shift, and go to state 23
+    RETURN           shift, and go to state 24
+    NB               shift, and go to state 25
+    ID               shift, and go to state 26
+    LONG_ID          shift, and go to state 10
+
+    variable             go to state 27
+    var_declaration      go to state 28
+    expression           go to state 29
+    function_call        go to state 30
+    if_prelude           go to state 31
+    if_condition         go to state 32
+    condition_branching  go to state 33
+    statement            go to state 50
+
+
+State 32
+
+   35 condition_branching: if_condition • optional_else
+
+    ELSE  shift, and go to state 51
+
+    $default  reduce using rule 33 (optional_else)
+
+    optional_else  go to state 52
+
+
+State 33
+
+   36 statement: condition_branching •
+
+    $default  reduce using rule 36 (statement)
+
+
+State 34
+
+   42 statement_list: statement_list statement •
+
+    $default  reduce using rule 42 (statement_list)
+
+
+State 35
+
+   16 var_list: var_list COMMA variable •
+
+    $default  reduce using rule 16 (var_list)
+
+
+State 36
+
+    7 function_definition_start: ID O_PAR func_params C_PAR • O_CURLY_BRACKET
+
+    O_CURLY_BRACKET  shift, and go to state 53
+
+
+State 37
+
+   12 some_params: some_params COMMA • variable
+
+    ID       shift, and go to state 9
+    LONG_ID  shift, and go to state 10
+
+    variable  go to state 54
+
+
+State 38
+
+   37 statement: O_CURLY_BRACKET statement_list • C_CURLY_BRACKET
+   42 statement_list: statement_list • statement
+
+    O_CURLY_BRACKET  shift, and go to state 21
+    C_CURLY_BRACKET  shift, and go to state 55
+    AUTO             shift, and go to state 1
+    IF               shift, and go to state 23
+    RETURN           shift, and go to state 24
+    NB               shift, and go to state 25
+    ID               shift, and go to state 26
+    LONG_ID          shift, and go to state 10
+
+    variable             go to state 27
+    var_declaration      go to state 28
+    expression           go to state 29
+    function_call        go to state 30
+    if_prelude           go to state 31
+    if_condition         go to state 32
+    condition_branching  go to state 33
+    statement            go to state 34
+
+
+State 39
+
+   31 if_prelude: IF O_PAR • expression C_PAR
+
+    NB       shift, and go to state 25
+    ID       shift, and go to state 26
+    LONG_ID  shift, and go to state 10
+
+    variable       go to state 27
+    expression     go to state 56
+    function_call  go to state 30
+
+
+State 40
+
+   21 expression: expression • PLUS expression
+   22           | expression • MINUS expression
+   24           | expression • ASTE expression
+   25           | expression • PERCENT expression
+   26           | expression • SLASH expression
+   40 statement: RETURN expression • SEMICOLON
+
+    PLUS       shift, and go to state 44
+    MINUS      shift, and go to state 45
+    ASTE       shift, and go to state 46
+    SLASH      shift, and go to state 47
+    PERCENT    shift, and go to state 48
+    SEMICOLON  shift, and go to state 57
+
+
+State 41
+
+   29 function_call: ID O_PAR • expression_list C_PAR
+   30              | ID O_PAR • C_PAR
+
+    C_PAR    shift, and go to state 58
+    NB       shift, and go to state 25
+    ID       shift, and go to state 26
+    LONG_ID  shift, and go to state 10
+
+    variable         go to state 27
+    expression       go to state 59
+    expression_list  go to state 60
+    function_call    go to state 30
+
+
+State 42
+
+   23 expression: variable EQUAL • expression
+
+    NB       shift, and go to state 25
+    ID       shift, and go to state 26
+    LONG_ID  shift, and go to state 10
+
+    variable       go to state 27
+    expression     go to state 61
+    function_call  go to state 30
+
+
+State 43
+
+   38 statement: var_declaration SEMICOLON •
+
+    $default  reduce using rule 38 (statement)
+
+
+State 44
+
+   21 expression: expression PLUS • expression
+
+    NB       shift, and go to state 25
+    ID       shift, and go to state 26
+    LONG_ID  shift, and go to state 10
+
+    variable       go to state 27
+    expression     go to state 62
+    function_call  go to state 30
+
+
+State 45
+
+   22 expression: expression MINUS • expression
+
+    NB       shift, and go to state 25
+    ID       shift, and go to state 26
+    LONG_ID  shift, and go to state 10
+
+    variable       go to state 27
+    expression     go to state 63
+    function_call  go to state 30
+
+
+State 46
+
+   24 expression: expression ASTE • expression
+
+    NB       shift, and go to state 25
+    ID       shift, and go to state 26
+    LONG_ID  shift, and go to state 10
+
+    variable       go to state 27
+    expression     go to state 64
+    function_call  go to state 30
+
+
+State 47
+
+   26 expression: expression SLASH • expression
+
+    NB       shift, and go to state 25
+    ID       shift, and go to state 26
+    LONG_ID  shift, and go to state 10
+
+    variable       go to state 27
+    expression     go to state 65
+    function_call  go to state 30
+
+
+State 48
+
+   25 expression: expression PERCENT • expression
+
+    NB       shift, and go to state 25
+    ID       shift, and go to state 26
+    LONG_ID  shift, and go to state 10
+
+    variable       go to state 27
+    expression     go to state 66
+    function_call  go to state 30
+
+
+State 49
+
+   39 statement: expression SEMICOLON •
+
+    $default  reduce using rule 39 (statement)
+
+
+State 50
+
+   32 if_condition: if_prelude statement •
+
+    $default  reduce using rule 32 (if_condition)
+
+
+State 51
+
+   34 optional_else: ELSE • statement
+
+    O_CURLY_BRACKET  shift, and go to state 21
+    AUTO             shift, and go to state 1
+    IF               shift, and go to state 23
+    RETURN           shift, and go to state 24
+    NB               shift, and go to state 25
+    ID               shift, and go to state 26
+    LONG_ID          shift, and go to state 10
+
+    variable             go to state 27
+    var_declaration      go to state 28
+    expression           go to state 29
+    function_call        go to state 30
+    if_prelude           go to state 31
+    if_condition         go to state 32
+    condition_branching  go to state 33
+    statement            go to state 67
+
+
+State 52
+
+   35 condition_branching: if_condition optional_else •
+
+    $default  reduce using rule 35 (condition_branching)
+
+
+State 53
+
+    7 function_definition_start: ID O_PAR func_params C_PAR O_CURLY_BRACKET •
+
+    $default  reduce using rule 7 (function_definition_start)
+
+
+State 54
+
+   12 some_params: some_params COMMA variable •
+
+    $default  reduce using rule 12 (some_params)
+
+
+State 55
+
+   37 statement: O_CURLY_BRACKET statement_list C_CURLY_BRACKET •
+
+    $default  reduce using rule 37 (statement)
+
+
+State 56
+
+   21 expression: expression • PLUS expression
+   22           | expression • MINUS expression
+   24           | expression • ASTE expression
+   25           | expression • PERCENT expression
+   26           | expression • SLASH expression
+   31 if_prelude: IF O_PAR expression • C_PAR
+
+    PLUS     shift, and go to state 44
+    MINUS    shift, and go to state 45
+    ASTE     shift, and go to state 46
+    SLASH    shift, and go to state 47
+    PERCENT  shift, and go to state 48
+    C_PAR    shift, and go to state 68
+
+
+State 57
+
+   40 statement: RETURN expression SEMICOLON •
+
+    $default  reduce using rule 40 (statement)
+
+
+State 58
+
+   30 function_call: ID O_PAR C_PAR •
+
+    $default  reduce using rule 30 (function_call)
+
+
+State 59
+
+   21 expression: expression • PLUS expression
+   22           | expression • MINUS expression
+   24           | expression • ASTE expression
+   25           | expression • PERCENT expression
+   26           | expression • SLASH expression
+   27 expression_list: expression •
+
+    PLUS     shift, and go to state 44
+    MINUS    shift, and go to state 45
+    ASTE     shift, and go to state 46
+    SLASH    shift, and go to state 47
+    PERCENT  shift, and go to state 48
+
+    $default  reduce using rule 27 (expression_list)
+
+
+State 60
+
+   28 expression_list: expression_list • COMMA expression
+   29 function_call: ID O_PAR expression_list • C_PAR
+
+    C_PAR  shift, and go to state 69
+    COMMA  shift, and go to state 70
+
+
+State 61
+
+   21 expression: expression • PLUS expression
+   22           | expression • MINUS expression
+   23           | variable EQUAL expression •
+   24           | expression • ASTE expression
+   25           | expression • PERCENT expression
+   26           | expression • SLASH expression
+
+    PLUS     shift, and go to state 44
+    MINUS    shift, and go to state 45
+    ASTE     shift, and go to state 46
+    SLASH    shift, and go to state 47
+    PERCENT  shift, and go to state 48
+
+    $default  reduce using rule 23 (expression)
+
+
+State 62
+
+   21 expression: expression • PLUS expression
+   21           | expression PLUS expression •
+   22           | expression • MINUS expression
+   24           | expression • ASTE expression
+   25           | expression • PERCENT expression
+   26           | expression • SLASH expression
+
+    ASTE     shift, and go to state 46
+    SLASH    shift, and go to state 47
+    PERCENT  shift, and go to state 48
+
+    $default  reduce using rule 21 (expression)
+
+
+State 63
+
+   21 expression: expression • PLUS expression
+   22           | expression • MINUS expression
+   22           | expression MINUS expression •
+   24           | expression • ASTE expression
+   25           | expression • PERCENT expression
+   26           | expression • SLASH expression
+
+    ASTE     shift, and go to state 46
+    SLASH    shift, and go to state 47
+    PERCENT  shift, and go to state 48
+
+    $default  reduce using rule 22 (expression)
+
+
+State 64
+
+   21 expression: expression • PLUS expression
+   22           | expression • MINUS expression
+   24           | expression • ASTE expression
+   24           | expression ASTE expression •
+   25           | expression • PERCENT expression
+   26           | expression • SLASH expression
+
+    $default  reduce using rule 24 (expression)
+
+
+State 65
+
+   21 expression: expression • PLUS expression
+   22           | expression • MINUS expression
+   24           | expression • ASTE expression
+   25           | expression • PERCENT expression
+   26           | expression • SLASH expression
+   26           | expression SLASH expression •
+
+    $default  reduce using rule 26 (expression)
+
+
+State 66
+
+   21 expression: expression • PLUS expression
+   22           | expression • MINUS expression
+   24           | expression • ASTE expression
+   25           | expression • PERCENT expression
+   25           | expression PERCENT expression •
+   26           | expression • SLASH expression
+
+    $default  reduce using rule 25 (expression)
+
+
+State 67
+
+   34 optional_else: ELSE statement •
+
+    $default  reduce using rule 34 (optional_else)
+
+
+State 68
+
+   31 if_prelude: IF O_PAR expression C_PAR •
+
+    $default  reduce using rule 31 (if_prelude)
+
+
+State 69
+
+   29 function_call: ID O_PAR expression_list C_PAR •
+
+    $default  reduce using rule 29 (function_call)
+
+
+State 70
+
+   28 expression_list: expression_list COMMA • expression
+
+    NB       shift, and go to state 25
+    ID       shift, and go to state 26
+    LONG_ID  shift, and go to state 10
+
+    variable       go to state 27
+    expression     go to state 71
+    function_call  go to state 30
+
+
+State 71
+
+   21 expression: expression • PLUS expression
+   22           | expression • MINUS expression
+   24           | expression • ASTE expression
+   25           | expression • PERCENT expression
+   26           | expression • SLASH expression
+   28 expression_list: expression_list COMMA expression •
+
+    PLUS     shift, and go to state 44
+    MINUS    shift, and go to state 45
+    ASTE     shift, and go to state 46
+    SLASH    shift, and go to state 47
+    PERCENT  shift, and go to state 48
+
+    $default  reduce using rule 28 (expression_list)
