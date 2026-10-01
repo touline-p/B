@@ -54,44 +54,50 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    EQUAL = 258,                   /* EQUAL  */
-    PLUS = 259,                    /* PLUS  */
-    MINUS = 260,                   /* MINUS  */
-    ASTE = 261,                    /* ASTE  */
-    SLASH = 262,                   /* SLASH  */
-    PERCENT = 263,                 /* PERCENT  */
-    O_PAR = 264,                   /* O_PAR  */
-    C_PAR = 265,                   /* C_PAR  */
-    D_QUOTES = 266,                /* D_QUOTES  */
-    S_QUOTES = 267,                /* S_QUOTES  */
-    O_BRACKET = 268,               /* O_BRACKET  */
-    C_BRACKET = 269,               /* C_BRACKET  */
-    O_CURLY_BRACKET = 270,         /* O_CURLY_BRACKET  */
-    C_CURLY_BRACKET = 271,         /* C_CURLY_BRACKET  */
-    COMMA = 272,                   /* COMMA  */
-    PERIOD = 273,                  /* PERIOD  */
-    SEMICOLON = 274,               /* SEMICOLON  */
-    EOLN = 275,                    /* EOLN  */
-    AUTO = 276,                    /* AUTO  */
-    EXTRN = 277,                   /* EXTRN  */
-    IF = 278,                      /* IF  */
-    FOR = 279,                     /* FOR  */
-    WHILE = 280,                   /* WHILE  */
-    REPEAT = 281,                  /* REPEAT  */
-    SWITCH = 282,                  /* SWITCH  */
-    DO = 283,                      /* DO  */
-    RETURN = 284,                  /* RETURN  */
-    BREAK = 285,                   /* BREAK  */
-    GOTO = 286,                    /* GOTO  */
-    NEXT = 287,                    /* NEXT  */
-    CASE = 288,                    /* CASE  */
-    DEFAULT = 289,                 /* DEFAULT  */
-    LOWER_THAN_ELSE = 290,         /* LOWER_THAN_ELSE  */
-    ELSE = 291,                    /* ELSE  */
-    NB = 292,                      /* NB  */
-    ID = 293,                      /* ID  */
-    LONG_ID = 294,                 /* LONG_ID  */
-    TOO_LONG_ID = 295              /* TOO_LONG_ID  */
+    ASSIGN = 258,                  /* ASSIGN  */
+    S_INF = 259,                   /* S_INF  */
+    S_SUP = 260,                   /* S_SUP  */
+    INF = 261,                     /* INF  */
+    SUP = 262,                     /* SUP  */
+    EQUAL = 263,                   /* EQUAL  */
+    NOT_EQUAL = 264,               /* NOT_EQUAL  */
+    PLUS = 265,                    /* PLUS  */
+    MINUS = 266,                   /* MINUS  */
+    ASTE = 267,                    /* ASTE  */
+    SLASH = 268,                   /* SLASH  */
+    PERCENT = 269,                 /* PERCENT  */
+    O_PAR = 270,                   /* O_PAR  */
+    C_PAR = 271,                   /* C_PAR  */
+    D_QUOTES = 272,                /* D_QUOTES  */
+    S_QUOTES = 273,                /* S_QUOTES  */
+    O_BRACKET = 274,               /* O_BRACKET  */
+    C_BRACKET = 275,               /* C_BRACKET  */
+    O_CURLY_BRACKET = 276,         /* O_CURLY_BRACKET  */
+    C_CURLY_BRACKET = 277,         /* C_CURLY_BRACKET  */
+    COMMA = 278,                   /* COMMA  */
+    PERIOD = 279,                  /* PERIOD  */
+    SEMICOLON = 280,               /* SEMICOLON  */
+    EOLN = 281,                    /* EOLN  */
+    AUTO = 282,                    /* AUTO  */
+    EXTRN = 283,                   /* EXTRN  */
+    IF = 284,                      /* IF  */
+    FOR = 285,                     /* FOR  */
+    WHILE = 286,                   /* WHILE  */
+    REPEAT = 287,                  /* REPEAT  */
+    SWITCH = 288,                  /* SWITCH  */
+    DO = 289,                      /* DO  */
+    RETURN = 290,                  /* RETURN  */
+    BREAK = 291,                   /* BREAK  */
+    GOTO = 292,                    /* GOTO  */
+    NEXT = 293,                    /* NEXT  */
+    CASE = 294,                    /* CASE  */
+    DEFAULT = 295,                 /* DEFAULT  */
+    LOWER_THAN_ELSE = 296,         /* LOWER_THAN_ELSE  */
+    ELSE = 297,                    /* ELSE  */
+    NB = 298,                      /* NB  */
+    ID = 299,                      /* ID  */
+    LONG_ID = 300,                 /* LONG_ID  */
+    TOO_LONG_ID = 301              /* TOO_LONG_ID  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -100,53 +106,59 @@ extern int yydebug;
 #define YYEOF 0
 #define YYerror 256
 #define YYUNDEF 257
-#define EQUAL 258
-#define PLUS 259
-#define MINUS 260
-#define ASTE 261
-#define SLASH 262
-#define PERCENT 263
-#define O_PAR 264
-#define C_PAR 265
-#define D_QUOTES 266
-#define S_QUOTES 267
-#define O_BRACKET 268
-#define C_BRACKET 269
-#define O_CURLY_BRACKET 270
-#define C_CURLY_BRACKET 271
-#define COMMA 272
-#define PERIOD 273
-#define SEMICOLON 274
-#define EOLN 275
-#define AUTO 276
-#define EXTRN 277
-#define IF 278
-#define FOR 279
-#define WHILE 280
-#define REPEAT 281
-#define SWITCH 282
-#define DO 283
-#define RETURN 284
-#define BREAK 285
-#define GOTO 286
-#define NEXT 287
-#define CASE 288
-#define DEFAULT 289
-#define LOWER_THAN_ELSE 290
-#define ELSE 291
-#define NB 292
-#define ID 293
-#define LONG_ID 294
-#define TOO_LONG_ID 295
+#define ASSIGN 258
+#define S_INF 259
+#define S_SUP 260
+#define INF 261
+#define SUP 262
+#define EQUAL 263
+#define NOT_EQUAL 264
+#define PLUS 265
+#define MINUS 266
+#define ASTE 267
+#define SLASH 268
+#define PERCENT 269
+#define O_PAR 270
+#define C_PAR 271
+#define D_QUOTES 272
+#define S_QUOTES 273
+#define O_BRACKET 274
+#define C_BRACKET 275
+#define O_CURLY_BRACKET 276
+#define C_CURLY_BRACKET 277
+#define COMMA 278
+#define PERIOD 279
+#define SEMICOLON 280
+#define EOLN 281
+#define AUTO 282
+#define EXTRN 283
+#define IF 284
+#define FOR 285
+#define WHILE 286
+#define REPEAT 287
+#define SWITCH 288
+#define DO 289
+#define RETURN 290
+#define BREAK 291
+#define GOTO 292
+#define NEXT 293
+#define CASE 294
+#define DEFAULT 295
+#define LOWER_THAN_ELSE 296
+#define ELSE 297
+#define NB 298
+#define ID 299
+#define LONG_ID 300
+#define TOO_LONG_ID 301
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 166 "y_compilator.y"
+#line 185 "y_compilator.y"
  int ival; char *sval ; 
 
-#line 150 "y.tab.h"
+#line 162 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

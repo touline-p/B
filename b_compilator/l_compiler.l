@@ -20,44 +20,51 @@ LONG_IDENTIFIER {IDENTIFIER_CHAR}({IDENTIFIER_CHAR}|{NUMBER}){0,9}
 TOO_LONG_IDENTIFIER {IDENTIFIER_CHAR}({IDENTIFIER_CHAR}|{NUMBER})*
 
 %%
-{NUMBER}+    { printf("nb[%s] ", yytext); yylval.ival = atoi(yytext); return NB; }
-"+"          { printf("PLUS "); return PLUS; }
-"-"          { printf("MINUS "); return MINUS; }
-"="          { printf("EQUAL "); return EQUAL; }
-"*"          { printf("ASTE "); return ASTE; }
-"/"          { printf("SLASH "); return SLASH; }
-"%"          { printf("PERCENT "); return PERCENT; }
-"("          { printf("O_PAR "); return O_PAR; }
-")"          { printf("C_PAR "); return C_PAR; }
-"\""         { printf("D_QUOTES "); return D_QUOTES; }
-"\'"         { printf("S_QUOTES "); return S_QUOTES; }
-"["          { printf("O_BRACKET "); return O_BRACKET; }
-"]"          { printf("C_BRACKET "); return C_BRACKET; }
-"{"          { printf("O_CURLY_BRACKET "); return O_CURLY_BRACKET; }
-"}"          { printf("C_CURLY_BRACKET "); return C_CURLY_BRACKET; }
-","          { printf("COMMA "); return COMMA; }
-"."          { printf("PERIOD "); return PERIOD; }
-";"          { printf("SEMICOLON "); return SEMICOLON; }
+{NUMBER}+    {  yylval.ival = atoi(yytext); return NB; }
+
+"+"          {  return PLUS; }
+"-"          {  return MINUS; }
+"<"          {  return S_INF; }
+">"          {  return S_SUP; }
+"="          {  return ASSIGN; }
+">="         {  return SUP; }
+"<="         {  return INF; }
+"=="         {  return EQUAL; }
+"!="         {  return NOT_EQUAL; }
+"*"          {  return ASTE; }
+"/"          {  return SLASH; }
+"%"          {  return PERCENT; }
+"("          {  return O_PAR; }
+")"          {  return C_PAR; }
+"\""         {  return D_QUOTES; }
+"\'"         {  return S_QUOTES; }
+"["          {  return O_BRACKET; }
+"]"          {  return C_BRACKET; }
+"{"          {  return O_CURLY_BRACKET; }
+"}"          {  return C_CURLY_BRACKET; }
+","          {  return COMMA; }
+"."          {  return PERIOD; }
+";"          {  return SEMICOLON; }
 
 {WHITESPACE} ;
-"\n"          { printf("\n"); }
+"\n"          {  }
 
-auto 		 { printf("<auto> "); return AUTO; }
-extern		 { printf("<extrn> "); return EXTRN; }
-if		     { printf("<if> "); return IF; }
-else		 { printf("<else> "); return ELSE; }
-for		     { printf("<for> "); return FOR; }
-while		 { printf("<while> "); return WHILE; }
-repeat		 { printf("<repeat> "); return REPEAT; }
-switch		 { printf("<switch> "); return SWITCH; }
-do		     { printf("<do> "); return DO; }
-return		 { printf("<return> "); return RETURN; }
-break		 { printf("<break> "); return BREAK; }
-goto		 { printf("<goto> "); return GOTO; }
-next		 { printf("<next> "); return NEXT; }
-case		 { printf("<case> "); return CASE; }
-default		 { printf("<default> "); return DEFAULT; }
+auto 		 {  return AUTO; }
+extern		 {  return EXTRN; }
+if		     {  return IF; }
+else		 {  return ELSE; }
+for		     {  return FOR; }
+while		 {  return WHILE; }
+repeat		 {  return REPEAT; }
+switch		 {  return SWITCH; }
+do		     {  return DO; }
+return		 {  return RETURN; }
+break		 {  return BREAK; }
+goto		 {  return GOTO; }
+next		 {  return NEXT; }
+case		 {  return CASE; }
+default		 {  return DEFAULT; }
 
-{IDENTIFIER}	{	printf("ID[%s] ", yytext); yylval.sval = strdup(yytext); return ID;}
-{LONG_IDENTIFIER}	{	printf("LONG_ID[%s] ", yytext);yylval.sval = strdup(yytext); return LONG_ID;}
-{TOO_LONG_IDENTIFIER} {	printf("TOO_LONG_IDENTIFIER[%s] ", yytext);yylval.sval = strdup(yytext); return TOO_LONG_ID;} 
+{IDENTIFIER}	        {	yylval.sval = strdup(yytext); return ID;}
+{LONG_IDENTIFIER}	    {	yylval.sval = strdup(yytext); return LONG_ID;}
+{TOO_LONG_IDENTIFIER}   {	yylval.sval = strdup(yytext); return TOO_LONG_ID;} 

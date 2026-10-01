@@ -11,6 +11,7 @@ int global_fd;
 
 void yyerror( const char *s );
 int yylex(void);
+int yyunput(char c);
 
 struct s_variable {
     int offset;
@@ -35,6 +36,22 @@ struct label_list {
 };
 
 typedef struct label_list t_ll;
+
+struct params_list {
+    struct params_list *next;
+    char *name;
+};
+
+typedef struct params_list t_pl;
+
+t_pl *params = NULL;
+
+void push_param(char *var_name) {
+    t_pl *node = malloc(sizeof(t_pl));
+    node->name = var_name;
+    node->next = params;
+    params = node;
+}
 
 t_ll *labels = NULL;
 
@@ -128,9 +145,11 @@ int lookup(char *name) {
 
 %}
 
-%right EQUAL 
+%right ASSIGN 
+%left S_INF S_SUP INF SUP EQUAL NOT_EQUAL
 %left PLUS MINUS 
 %left ASTE SLASH PERCENT 
+
 
 %token O_PAR 
 %token C_PAR 
@@ -168,9 +187,9 @@ int lookup(char *name) {
 %token <ival> NB 
 %token <sval> ID LONG_ID TOO_LONG_ID
 
-/*%type <s_node> expression func_params function_call function_definition program program_elem some_params statement statement_list expression_list */
-%type <sval> variable expression function_call var_declaration 
-%type <ival> var_list
+/*%type <s_node> expression func_params function_call function_definition program program_elem some_params statement statement_list */
+%type <sval> variable expression function_call var_declaration function_definition_prelude comp_operation
+%type <ival> var_list expression_list 
 %%
 
 any_program:
@@ -189,14 +208,17 @@ program_elem:
             ;
 
 
-function_definition_start: ID O_PAR func_params C_PAR O_CURLY_BRACKET {
-               open_ctxt(strdup($1));
+function_definition_start: function_definition_prelude  func_params C_PAR O_CURLY_BRACKET {
                dprintf(global_fd, ".global %s\n", func_name);
                dprintf(global_fd, "%s:\n", $1);
                dprintf(global_fd, "push ebp\n");
                dprintf(global_fd, "mov ebp, esp\n");
             };
 
+function_definition_prelude: ID O_PAR {
+               open_ctxt(strdup($1));
+               $$ = $1;
+                           };
 function_definition:
             function_definition_start statement_list C_CURLY_BRACKET {
                dprintf(global_fd, "end_%s:\n", func_name);
@@ -208,17 +230,26 @@ function_definition:
 
 func_params:
            /* empty */  
-           | some_params
+           | some_params {
+                while (params) {
+                    t_pl *tmp = params;
+                    declare_params(params->name);
+                    params = params->next;
+                    free(tmp);
+                }
+           }
            ;
 
 some_params:
-           variable { declare_params($1); }
-           | some_params COMMA variable { declare_params($3); }
+           variable {
+                push_param($1);
+           }
+           | some_params COMMA variable { push_param($3); }
            ;
 
 variable:
-        LONG_ID { printf("variable [%s]\n", $1); $$ = $1; }
-        | ID { printf("variable [%s]\n", $1); $$ = $1; }
+        LONG_ID 
+        | ID 
         ;
 
 var_list:
@@ -234,11 +265,9 @@ var_declaration: AUTO var_list {
 
 expression:
           function_call {
-                char * s;
-                dprintf(global_fd, "call %s\n", $1);
-                dprintf(global_fd, "push eax\n");
           }
           | variable {
+                
                 int offset = lookup($1);
                 if (offset == VAR_NOT_FOUND) {
                     dprintf(2, "ERROR: %s was not found in function context\n", $1);
@@ -265,7 +294,7 @@ expression:
                 dprintf(global_fd, "push eax\n");
 			}
 				
-          | variable EQUAL expression
+          | variable ASSIGN expression
                {
                 dprintf(global_fd, "pop eax\n");
                 int offset = lookup($1);
@@ -302,15 +331,38 @@ expression:
                 dprintf(global_fd, "idiv ebx\n");
                 dprintf(global_fd, "push eax\n");
 			}
+          | expression comp_operation expression %prec EQUAL{
+                dprintf(global_fd, "pop ebx\n");
+                dprintf(global_fd, "pop eax\n");
+                dprintf(global_fd, "cmp eax, ebx\n");
+                dprintf(global_fd, "%s\n", $2);
+                dprintf(global_fd, "movzx eax, al\n");
+          }
+
+
+comp_operation:
+          EQUAL { $$ = "sete al\n"; }
+          | NOT_EQUAL { $$ = "setne al\n"; }
+          | SUP { $$ = "setge al\n"; }
+          | S_SUP { $$ = "setg al\n"; }
+          | INF { $$ = "setle al\n"; }
+          | S_INF { $$ = "setl al\n"; }
           ;
 
-expression_list: expression
-               | expression_list COMMA expression
+expression_list: expression { $$ = 1; }
+               | expression_list COMMA expression { $$ = $1 + 1; }
                ;
 
 
-function_call: ID O_PAR expression_list C_PAR { $$ = $1 ; }
-             | ID O_PAR C_PAR { $$ = $1 ; }
+function_call: ID O_PAR expression_list C_PAR {
+                dprintf(global_fd, "call %s\n", $1);
+                dprintf(global_fd, "add esp, %d\n", $3 * 4);
+                dprintf(global_fd, "push eax\n");
+             }
+             | ID O_PAR C_PAR {
+                dprintf(global_fd, "call %s\n", $1);
+                dprintf(global_fd, "push eax\n");
+             }
              ;
 
 
@@ -383,6 +435,7 @@ char *progname;
 
 int main( int argc, char *argv[] )
 {
+  (void)argc;
   global_fd = creat("compilation.s", 0700);
   progname = argv[0];
   dprintf(global_fd, ".intel_syntax noprefix\n.text\n");

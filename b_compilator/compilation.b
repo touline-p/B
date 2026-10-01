@@ -1,6 +1,5 @@
 main() {
     auto a;
-    if (2) { a = 1; }
-    if (0) { a = 2; }
-    return a;
+    if (1 != 1) { return 1; }
+    return 0;
 }
