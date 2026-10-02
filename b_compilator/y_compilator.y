@@ -152,6 +152,7 @@ int lookup(char *name) {
 
 
 %token O_PAR 
+%token COLON 
 %token C_PAR 
 %token D_QUOTES 
 %token S_QUOTES 
@@ -409,6 +410,7 @@ statement: condition_branching {
             pop_label();
          }
          | O_CURLY_BRACKET statement_list C_CURLY_BRACKET {}
+         | ID COLON { printf("%s:\n", $1);}
          | var_declaration SEMICOLON {}
          | expression SEMICOLON {
             dprintf(global_fd, "pop eax\n");

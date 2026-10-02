@@ -22,6 +22,7 @@ TOO_LONG_IDENTIFIER {IDENTIFIER_CHAR}({IDENTIFIER_CHAR}|{NUMBER})*
 %%
 {NUMBER}+    {  yylval.ival = atoi(yytext); return NB; }
 
+":"          {  return COLON; }
 "+"          {  return PLUS; }
 "-"          {  return MINUS; }
 "<"          {  return S_INF; }
